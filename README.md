@@ -95,7 +95,7 @@ Rscript transcript_classifying.r updated_filtered_alignment.sam significance_win
 To replace:
 - `transcript_classifying.r`: Path to your transcript_classifying.r script from Mamane-Logsdon *et al*., 2025.
 - `updated_filtered_alignment.sam`: Path to your W0 corrected SAM file.
-- `significance_window`: Your window size in bp for grouping read ends to define a significant 5′ or 3′ end, e.g., 2. This is the first window applied.
+- `significance_window`: Detfines window size (±n bp) for grouping read ends to define a significant 5′ or 3′ end, e.g. value of 2 defines a 5bp window (position n±2). This is the first window applied.
 - `mininum_significant_read_count`: Your minimum number of reads within your significance window required to define a significant 5' or 3' end, e.g., 5.
 - `noise_window`: Your window size in bp for capturing unassigned read ends near significant 5' or 3' ends to assign them to said significant ends, e.g., 20. This is done without unclipping clipped bases of unassigned reads. This is the second window applied.
 - `clip_window`: Your window size in bp for capturing unassigned read ends near significant 5' or 3' ends to assign them to said significant ends, e.g., 20. This is done with unclipping clipped bases of unassigned reads. This is the third and final window applied.
