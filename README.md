@@ -1,6 +1,6 @@
 # EBV transcriptomics tools
 
-This repository serves strictly as a tutorial for the bioinformatics methodology behind [Mamane-Logsdon *et al*., 2025](), and as a place to store the scripts developed during the study. For data used or generated during the study, please follow links from [the front page of ebv.org.uk](http://ebv/org/uk).  
+This repository serves strictly as a tutorial for the bioinformatics methodology behind [Mamane-Logsdon *et al*., 2025](), and as a place to store the scripts developed during the study. For data used or generated during the study, please follow links from [the front page of ebv.org.uk](http://ebv.org.uk).  
 
 The methodology was developed as part of a pipeline for the characterisation of the Epstein-Barr virus (EBV) latency transcriptome based from nanopore direct RNA sequencing. This tutorial begins at the basecalling raw nanopore singal-level data in FAST5 format, and, therefore, assumes that the user has a FAST5 file. Also, for conciseness, this tutorial only focuses on the full-length transcript output of the methodology.
 
