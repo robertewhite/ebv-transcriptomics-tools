@@ -77,7 +77,7 @@ Rscript W0_correcting.r filtered_alignment.sam exons.bed
 To replace:
 - `W0_correcting.r`: Path to your W0_correcting.r script from Mamane-Logsdon *et al*., 2025.
 - `filtered_alignment.sam`: Path to your filtered SAM file.
-- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's W0, W1, and W1' exons. See [here]() for the expected format.
+- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's W0, W1, and W1' exons. See [here](http://EBV.org.uk/Nanopore/Annotations/EBNAexons_pHB9_oriPMlu.bed) for the expected format.
 
 Output (not shown):
 - `candidates_W0_id.sam`: SAM file containing candidate reads for W0 correction (by virtue of starting within 5 bp of the start of a W1 or W1' exon) that contain at least one of the W0-associated motifs ACAAT, ACAAAT, AGGAGT, or CAGGAGT within or adjacent to their 5′ soft clip, but not the W2-associated motif CAGGG.
@@ -115,7 +115,7 @@ Rscript IR1_repeat_counting.r full_length_transcripts.sam exons.bed start_end_wi
 To replace:
 - `IR1_repeat_counting.r`: Path to your IR1_repeat_counting.r script from Mamane-Logsdon *et al*., 2025.
 - `full_length_transcripts.sam`: Path to your full-length transcripts SAM file.
-- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's exons of interest. At minimum, exons C1, C2, W0, W1, W1', W2, and Y1 must be given. See [here]() for the expected format.
+- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's exons of interest. At minimum, exons C1, C2, W0, W1, W1', W2, and Y1 must be given. See [here](http://EBV.org.uk/Nanopore/Annotations/EBNAexons_pHB9_oriPMlu.bed) for the expected format.
 - `start_end_window`: Your window size in bp for how many bases outside of an exon’s start or end coordinates can still be considered part of that exon when annotating transcript structure.
 - `splice_window`: Your window size in bp for how many bases is close enough to an exon junction to be treated as a proper splice site when annotating transcript structure.
 
@@ -243,7 +243,7 @@ To replace:
 - `name_transcripts_and_track_ssc_V2.pl`: Path to your name_transcripts_and_track_ssc_V2.pl script from Donovan-Banfield *et al*., 2020.
 - `prefix`: Your prefix for output files, e.g., ebv.
 - `ssc_nt`: Your number of upstream nucleotides for each pseudo transcript to include in order to account for the loss of 5’ nucleotides in nanopore sequencing, e.g., 10.
-- `features_table.txt`: Path to your TXT file containing a list of features on the genome being analysed. See [here]() for the expected format.
+- `features_table.txt`: Path to your TXT file containing a list of features on the genome being analysed. See [here](http://EBV.org.uk/Nanopore/Annotations/Features_table_pHB9_oriPMlu.txt) for the expected format.
 - `genome.fasta`: Path to your FASTA file of your EBV genome of choice.
 - `ebv.start_sad_stop_pattern_count.txt`: Path to your TXT file describing each transcript group's start location, end location, strand, splice acceptor/donor locations (referred to as the sad location), the average and standard deviation for the polyA tail length, and how many transcripts belong to that group.
 
