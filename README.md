@@ -115,7 +115,7 @@ Rscript IR1_repeat_counting.r full_length_transcripts.sam exons.bed start_end_wi
 To replace:
 - `IR1_repeat_counting.r`: Path to your IR1_repeat_counting.r script from Mamane-Logsdon *et al*., 2025.
 - `full_length_transcripts.sam`: Path to your full-length transcripts SAM file.
-- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's exons of interest. At minimum, exons C1, C2, C2∆, W0, W1, W1', W2, W2∆ and Y1 must be given. See [here](http://EBV.org.uk/Nanopore/Annotations/EBNAexons_pHB9_oriPMlu.bed) for the expected format.
+- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's exons of interest. At minimum, exons C1, C2, W0, W1, W1', W2, and Y1 must be given, though all copies of W exons, plus C2' and W2∆ should be included for a meaningful analysis. See [here](http://EBV.org.uk/Nanopore/Annotations/EBNAexons_pHB9_oriPMlu.bed) for the expected format.
 - `start_end_window`: Your window size in bp for how many bases outside of an exon’s start or end coordinates can still be considered part of that exon when annotating transcript structure. We used ±20.
 - `splice_window`: Your window size in bp for how many bases is close enough to an exon junction to be treated as a proper splice site when annotating transcript structure. We used ±3 (which means splice sites mid way between W1 and W1' are assigned to W1).
 
