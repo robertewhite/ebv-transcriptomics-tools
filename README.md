@@ -97,8 +97,8 @@ To replace:
 - `updated_filtered_alignment.sam`: Path to your W0 corrected SAM file.
 - `significance_window`: Determines window size (±n bp) for grouping read ends to define a significant 5′ or 3′ end, e.g. value of 2 defines a 5bp window (position n±2). This is the first window applied.
 - `mininum_significant_read_count`: Your minimum number of reads within your significance window required to define a significant 5' or 3' end, e.g., 5.
-- `noise_window`: Your window size in bp for capturing unassigned read ends near significant 5' or 3' ends to assign them to said significant ends, e.g., 20. This is done without unclipping clipped bases of unassigned reads. This is the second window applied.
-- `clip_window`: Your window size in bp for capturing unassigned read ends near significant 5' or 3' ends to assign them to said significant ends, e.g., 20. This is done with unclipping clipped bases of unassigned reads. This is the third and final window applied.
+- `noise_window`: The distance in bp from the defined start size that determins the window for capturing unassigned read ends near significant 5' or 3' ends to assign them to said significant ends. We used ±20. This is done without unclipping clipped bases of unassigned reads. This is the second window applied.
+- `clip_window`: A second "noise window" (with equivalent functionality) applied after the the unclipping of soft-clipped bases of previously unassigned reads. We used ±20. This is the third and final window applied.
 
 Output (not shown):
 - `full_length_transcripts.sam`: SAM file containing the reads assigned to have both significant 5' and 3' ends. These reads are considered full-length transcripts.
@@ -115,9 +115,9 @@ Rscript IR1_repeat_counting.r full_length_transcripts.sam exons.bed start_end_wi
 To replace:
 - `IR1_repeat_counting.r`: Path to your IR1_repeat_counting.r script from Mamane-Logsdon *et al*., 2025.
 - `full_length_transcripts.sam`: Path to your full-length transcripts SAM file.
-- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's exons of interest. At minimum, exons C1, C2, W0, W1, W1', W2, and Y1 must be given. See [here](http://EBV.org.uk/Nanopore/Annotations/EBNAexons_pHB9_oriPMlu.bed) for the expected format.
-- `start_end_window`: Your window size in bp for how many bases outside of an exon’s start or end coordinates can still be considered part of that exon when annotating transcript structure.
-- `splice_window`: Your window size in bp for how many bases is close enough to an exon junction to be treated as a proper splice site when annotating transcript structure.
+- `exons.bed`: Path to your BED file containing the start and end coordinates of all your chosen EBV genome's exons of interest. At minimum, exons C1, C2, C2∆, W0, W1, W1', W2, W2∆ and Y1 must be given. See [here](http://EBV.org.uk/Nanopore/Annotations/EBNAexons_pHB9_oriPMlu.bed) for the expected format.
+- `start_end_window`: Your window size in bp for how many bases outside of an exon’s start or end coordinates can still be considered part of that exon when annotating transcript structure. We used ±20.
+- `splice_window`: Your window size in bp for how many bases is close enough to an exon junction to be treated as a proper splice site when annotating transcript structure. We used ±3 (which means splice sites mid way between W1 and W1' are assigned to W1).
 
 Output (not shown):
 - `exon_contents.txt`: TXT file listing each full-length transcript alongside the lengths of each aligned exon that the transcript contains. It is produced by looping through each transcript, identifying its aligned exons based on exon start-end coordinates and the user-specified windows, and then stores the aligned exon lengths in bp.
@@ -125,9 +125,11 @@ Output (not shown):
 
 <br>
 
-### Part 4: Determining the polyA tail status of full-length EBV transcripts
+### Part 4: Extracting the polyA tail status of EBV transcripts
 
-**4.1. Convert your full-length transcripts SAM file to a BAM file using samtools**:
+Depending on application you may wish to use the W0 exon-corrected file containing all transcripts from 3.1, or just the "full length" transcripts file from 3.2.
+
+**4.1. Convert your exon-corrected transcripts SAM file to a BAM file using samtools**:
 
 ```bash
 samtools view --bam full_length_transcripts.sam > full_length_transcripts.bam
@@ -215,14 +217,16 @@ perl classify_transcripts_and_polya_segmented_V2.pl prefix polya/TSS_window spli
 To replace:
 - `classify_transcripts_and_polya_segmented_V2.pl`: Path to your classify_transcripts_and_polya_segmented_V2.pl script from Donovan-Banfield *et al*., 2020. 
 - `prefix`: Your prefix for output files, e.g., ebv.
-- `polya/TSS_window`: Your window size for grouping transcription start or stop sites together, e.g., 20.
-- `splice_window`: Your window size for grouping splice sites together, e.g., 2.
-- `polya_min`: Your minimum length for a polyA tail before a transcript will be analysed, e.g., 8.
+- `polya/TSS_window`: Your ± window size for grouping transcription start or stop sites together, e.g., 20.
+- `splice_window`: Your ± window size for grouping splice sites together, e.g., 2.
+- `polya_min`: Your minimum length for a polyA tail before a transcript will be analysed, e.g., 8. 
 - `polya_results.tsv`: Path to your TSV file of polyA tail status of the full-length transcripts.
 - `full_length_transcripts_sort.sam`: Path to your sorted full-length transcripts SAM file.
 - `genome.fasta`: Path to your FASTA file of your EBV genome of choice.
 - `min_copy`: Your minimum copy number in a transcript group to consider, e.g., 1.
 - `max_entries`: Your maximum number of entries in the list of most abundant transcript groups, e.g., 80.
+
+Note: To include all transcripts in the analysis, regardless of pA length, use 0. This will still exclude reads with other flags (e.g. failed adapter removal etc).
 
 Output (not shown):
 - `ebv.canonical_transcripts_by_abundance.fasta`: FASTA file listing pseudo transcripts generated by using the start, end and splice patterns of the transcript groups found, one transcript per transcript group along with information on how many individual transcripts belong to that transcript group, the average polyA tail length, and the mapping co-ordinates.
@@ -242,7 +246,7 @@ To replace:
 
 - `name_transcripts_and_track_ssc_V2.pl`: Path to your name_transcripts_and_track_ssc_V2.pl script from Donovan-Banfield *et al*., 2020.
 - `prefix`: Your prefix for output files, e.g., ebv.
-- `ssc_nt`: Your number of upstream nucleotides for each pseudo transcript to include in order to account for the loss of 5’ nucleotides in nanopore sequencing, e.g., 10.
+- `ssc_nt`: Your number of upstream nucleotides for each pseudo transcript to include in order to account for the loss of typically the 8-12 most 5’ nucleotides in nanopore sequencing. We use 10.
 - `features_table.txt`: Path to your TXT file containing a list of features on the genome being analysed. See [here](http://EBV.org.uk/Nanopore/Annotations/Features_table_pHB9_oriPMlu.txt) for the expected format.
 - `genome.fasta`: Path to your FASTA file of your EBV genome of choice.
 - `ebv.start_sad_stop_pattern_count.txt`: Path to your TXT file describing each transcript group's start location, end location, strand, splice acceptor/donor locations (referred to as the sad location), the average and standard deviation for the polyA tail length, and how many transcripts belong to that group.
